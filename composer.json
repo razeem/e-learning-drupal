@@ -22,6 +22,7 @@
         "drupal/core-recommended": "^10.1",
         "drupal/devel": "^5.1",
         "drupal/inline_entity_form": "^2.0@RC",
+        "drupal/paragraphs": "^1.15",
         "drush/drush": "^12.1"
     },
     "conflict": {

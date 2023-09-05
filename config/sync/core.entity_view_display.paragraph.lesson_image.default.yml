@@ -1,0 +1,22 @@
+uuid: 70d49bf2-6a07-4226-802f-979c65ac10ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.lesson_image.field_media_image
+    - paragraphs.paragraphs_type.lesson_image
+id: paragraph.lesson_image.default
+targetEntityType: paragraph
+bundle: lesson_image
+mode: default
+content:
+  field_media_image:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

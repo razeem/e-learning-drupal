@@ -1,0 +1,41 @@
+uuid: bafcd27d-a7e2-4e5f-b8e4-a2141d748aab
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_lesson_medias
+    - node.type.lesson
+    - paragraphs.paragraphs_type.lesson_image
+    - paragraphs.paragraphs_type.lesson_texts
+    - paragraphs.paragraphs_type.lesson_videos
+  module:
+    - entity_reference_revisions
+id: node.lesson.field_lesson_medias
+field_name: field_lesson_medias
+entity_type: node
+bundle: lesson
+label: 'Lesson Medias'
+description: 'Medias related to the Lesson.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      lesson_texts: lesson_texts
+      lesson_image: lesson_image
+      lesson_videos: lesson_videos
+    negate: 0
+    target_bundles_drag_drop:
+      lesson_image:
+        weight: -6
+        enabled: true
+      lesson_texts:
+        weight: -7
+        enabled: true
+      lesson_videos:
+        weight: -5
+        enabled: true
+field_type: entity_reference_revisions

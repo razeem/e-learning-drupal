@@ -5,6 +5,8 @@ dependencies:
   config:
     - core.entity_form_mode.node.compact
     - field.field.node.lesson.body
+    - field.field.node.lesson.field_course
+    - field.field.node.lesson.field_lesson_medias
     - node.type.lesson
   module:
     - text
@@ -33,6 +35,8 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_course: true
+  field_lesson_medias: true
   path: true
   promote: true
   status: true

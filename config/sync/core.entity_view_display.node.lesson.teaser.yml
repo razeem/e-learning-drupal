@@ -5,6 +5,8 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.lesson.body
+    - field.field.node.lesson.field_course
+    - field.field.node.lesson.field_lesson_medias
     - node.type.lesson
   module:
     - text
@@ -27,4 +29,6 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
-hidden: {  }
+hidden:
+  field_course: true
+  field_lesson_medias: true

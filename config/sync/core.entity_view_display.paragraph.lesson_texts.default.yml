@@ -1,0 +1,22 @@
+uuid: c49ab505-8d4a-452b-9600-a050917f64a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.lesson_texts.field_body
+    - paragraphs.paragraphs_type.lesson_texts
+  module:
+    - text
+id: paragraph.lesson_texts.default
+targetEntityType: paragraph
+bundle: lesson_texts
+mode: default
+content:
+  field_body:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

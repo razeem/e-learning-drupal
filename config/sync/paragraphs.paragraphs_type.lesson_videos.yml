@@ -1,0 +1,10 @@
+uuid: 79b8fdc6-8250-4093-a8dc-d4d346fc8cf2
+langcode: en
+status: true
+dependencies: {  }
+id: lesson_videos
+label: 'Lesson Videos'
+icon_uuid: null
+icon_default: null
+description: 'Videos related to a Lesson content in a course.'
+behavior_plugins: {  }

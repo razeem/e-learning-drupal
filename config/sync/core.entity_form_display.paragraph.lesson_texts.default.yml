@@ -1,0 +1,27 @@
+uuid: fd1041d4-e031-46eb-80b1-82475ac8f8e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.lesson_texts.field_body
+    - paragraphs.paragraphs_type.lesson_texts
+  module:
+    - text
+id: paragraph.lesson_texts.default
+targetEntityType: paragraph
+bundle: lesson_texts
+mode: default
+content:
+  field_body:
+    type: text_textarea_with_summary
+    weight: 0
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
