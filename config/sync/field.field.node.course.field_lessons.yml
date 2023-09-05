@@ -1,0 +1,29 @@
+uuid: 912b7f91-fa51-49e4-8e70-f1571bc66c57
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_lessons
+    - node.type.course
+    - node.type.lesson
+id: node.course.field_lessons
+field_name: field_lessons
+entity_type: node
+bundle: course
+label: Lessons
+description: 'Lesson content type to be refferred which needs to come under the course contents.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      lesson: lesson
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
