@@ -1,0 +1,8 @@
+# Main theme library.
+global:
+  js:
+    js/e-learn-theme.js: {}
+  css:
+    theme:
+      css/theme/e-learn-theme.css: {}
+      css/theme/print.css: { media: print }

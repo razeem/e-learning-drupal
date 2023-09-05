@@ -1,0 +1,59 @@
+<?php
+
+use Drupal\Core\Database\Database;
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Custom Utility module.
+ */
+function custom_utility_install() {
+  $spec = [
+    'description' => 'Course, Lesson to User Mapping Table.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'course_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+      ],
+      'lesson_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+      ],
+      'current_course' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'current_date' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+      ],
+      'created_date' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+      ],
+      'updated_date' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('custom_utility_course_user_table', $spec);
+}

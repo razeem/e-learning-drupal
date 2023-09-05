@@ -1,0 +1,5 @@
+name: 'Custom Utility'
+type: module
+description: 'Custom Utility and services for E Learning drupal project'
+package: Custom
+core_version_requirement: ^10
