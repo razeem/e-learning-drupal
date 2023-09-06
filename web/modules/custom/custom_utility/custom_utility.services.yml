@@ -1,4 +1,4 @@
 services:
   custom_utility.common_service:
     class: Drupal\custom_utility\CommonService
-    arguments: ["@current_user", "@entity_type.manager"]
+    arguments: ["@current_user", "@database", "@entity_type.manager"]

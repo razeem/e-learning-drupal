@@ -2,6 +2,7 @@
 
 namespace Drupal\custom_utility;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 
@@ -10,12 +11,8 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 class CommonService {
 
-  /**
-   * A current user instance.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
+  protected AccountProxyInterface $currentUser;
+  protected Connection $database;
 
   /**
    * The entity type manager.
@@ -27,17 +24,76 @@ class CommonService {
   /**
    * Constructs a CommonService object.
    *
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   * @param AccountProxyInterface $current_user
    *   The current user.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param Connection $database
+   *   The database connector.
+   * @param EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
   public function __construct(
     AccountProxyInterface $current_user,
+    Connection $database,
     EntityTypeManagerInterface $entity_type_manager
   ) {
     $this->currentUser = $current_user;
+    $this->database = $database;
     $this->entityTypeManager = $entity_type_manager;
+  }
+
+  function checkCourseLessonEntryExist(string $course_id, string $lesson_id = null): mixed {
+    $query = $this->database->select('custom_utility_course_user_table', 'ct')
+    ->fields('ct', ['id'])
+    ->condition('ct.course_id', $course_id);
+    if ($lesson_id) {
+      $query->condition('ct.lesson_id', $lesson_id);
+    }
+    $query->condition('ct.user_id', $this->currentUser->id())
+    ->countQuery();
+    $count = $query->execute()
+      ->fetchField();
+    return $count;
+
+    // $query = $this->database->select('custom_utility_course_user_table', 'ct')
+    //   ->fields('ct', ['id'])
+    //   ->condition('ct.course_id', $course_id)
+    //   ->condition('ct.user_id', $this->currentUser->id())
+    //   ->execute()
+    //   ->fetchField();
+    // return $query;
+
+  }
+
+  function checkCourseLessonCompleted(string $course_id, string $lesson_id): mixed {
+    $query = $this->database->select('custom_utility_course_user_table', 'ct')
+      ->fields('ct', ['id'])
+      ->condition('ct.course_id', $course_id)
+      ->condition('ct.lesson_id', $lesson_id)
+      ->condition('ct.lesson_completed', 1)
+      ->condition('ct.user_id', $this->currentUser->id())
+      ->execute()
+      ->fetchField();
+    return $query;
+
+  }
+
+  function addCourseLessonEntry(string $course_id, string $lesson_id, bool $lesson_completed = FALSE): mixed {
+    $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
+
+    // Insert data into the custom course user table.
+    $query = $this->database->merge('custom_utility_course_user_table')
+      ->key([
+        'course_id' => $course_id,
+        'lesson_id' => $lesson_id,
+        'user_id' => $this->currentUser->id(),
+      ])
+      ->fields([
+        'lesson_completed' => $lesson_completed ? 1 : 0,
+        'created_date' => $creation_date,
+        'updated_date' => $creation_date,
+      ])
+      ->execute();
+    return $query;
   }
 
 }
