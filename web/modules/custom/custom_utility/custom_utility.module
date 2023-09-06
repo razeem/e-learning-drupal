@@ -10,10 +10,46 @@
  */
 function custom_utility_preprocess_node(&$variables) {
   // Check if this is a node page.
-  if (isset($variables['node']) && $variables['node']->bundle() == 'course') {
-    // Load the custom form.
-    $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
-    // Embed the form in the node's content.
-    $variables['content']['course_enroll_form'] = $form;
+  if (isset($variables['node'])) {
+    $form = null;
+    switch ($variables['node']->bundle()) {
+      case 'course':
+        // Load the custom coure enrol form for course entity.
+        $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
+        break;
+      case 'lesson':
+        // Load the custom lesson complete form for lesson entity.
+        $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\LessonCompleteForm');
+        break;
+
+      default:
+        # code...
+        break;
+    }
+    if ($form) {
+      // Embed the form in the node's content if form present.
+      $variables['content']['custom_form'] = $form;
+    }
+  }
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function custom_utility_node_insert($node) {
+  // Check if the node being saved is of the 'course' content type.
+  if ($node->getType() == 'course') {
+    // Load the referenced nodes (assuming you have a field named 'field_referenced_nodes').
+    $referenced_nodes = $node->get('field_lessons')->referencedEntities();
+
+    // Loop through the referenced nodes and update them.
+    foreach ($referenced_nodes as $referenced_node) {
+      // Check if the referenced node is of the desired content type.
+      if ($referenced_node->getType() == 'lesson') {
+        // Course reference is added here.
+        $referenced_node->set('field_course', $node->id());
+        $referenced_node->save();
+      }
+    }
   }
 }
