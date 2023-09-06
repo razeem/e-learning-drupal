@@ -4,3 +4,16 @@
  * @file
  * Primary module hooks for Custom Utility module.
  */
+
+/**
+ * Implements hook_preprocess_HOOK() for node templates.
+ */
+function custom_utility_preprocess_node(&$variables) {
+  // Check if this is a node page.
+  if (isset($variables['node']) && $variables['node']->bundle() == 'course') {
+    // Load the custom form.
+    $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
+    // Embed the form in the node's content.
+    $variables['content']['course_enroll_form'] = $form;
+  }
+}

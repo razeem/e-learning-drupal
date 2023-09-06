@@ -13,43 +13,48 @@ function custom_utility_install() {
       'id' => [
         'type' => 'serial',
         'not null' => TRUE,
+        'description' => 'Primary Key',
       ],
       'course_id' => [
         'type' => 'int',
         'not null' => TRUE,
         'default' => '0',
         'unsigned' => TRUE,
+        'description' => 'Course Node ID',
       ],
       'lesson_id' => [
         'type' => 'int',
         'not null' => TRUE,
         'default' => '0',
         'unsigned' => TRUE,
+        'description' => 'Lesson Node ID',
       ],
       'user_id' => [
         'type' => 'int',
         'not null' => TRUE,
         'default' => '0',
         'unsigned' => TRUE,
+        'description' => 'User ID',
       ],
       'current_course' => [
-        'type' => 'int',
+        'type' => 'int', // Add a boolean field.
+        'size' => 'tiny', // Add a boolean field.
+        'unsigned' => TRUE,
+        'default' => 0, // Set the default value to FALSE.
         'not null' => TRUE,
-      ],
-      'current_date' => [
-        'type' => 'varchar',
-        'mysql_type' => 'datetime',
-        'not null' => TRUE,
+        'description' => 'Is current course',
       ],
       'created_date' => [
         'type' => 'varchar',
         'mysql_type' => 'datetime',
         'not null' => TRUE,
+        'description' => 'Created Date Time',
       ],
       'updated_date' => [
         'type' => 'varchar',
         'mysql_type' => 'datetime',
         'not null' => TRUE,
+        'description' => 'Updated Date Time',
       ],
     ],
     'primary key' => ['id'],

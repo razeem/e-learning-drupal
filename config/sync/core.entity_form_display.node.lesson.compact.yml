@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.lesson.field_lesson_medias
     - node.type.lesson
   module:
+    - inline_entity_form
     - text
 id: node.lesson.compact
 targetEntityType: node
@@ -25,6 +26,32 @@ content:
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
+  field_lesson_medias:
+    type: inline_entity_form_complex
+    weight: 2
+    region: content
+    settings:
+      form_mode: default
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      auto_open: true
+      allow_new: true
+      allow_existing: false
+      allow_edit: true
+      match_operator: CONTAINS
+      allow_duplicate: false
+      hide_fieldset: false
+      hide_title: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: optional
+      config_labels_button: _none
+      labels: {  }
+      add_existing_widget: autocomplete
+      auto_open_edit_form: false
+    third_party_settings: {  }
   title:
     type: string_textfield
     weight: 0
@@ -36,7 +63,6 @@ content:
 hidden:
   created: true
   field_course: true
-  field_lesson_medias: true
   path: true
   promote: true
   status: true
