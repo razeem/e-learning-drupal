@@ -5,6 +5,8 @@
  * Primary module hooks for Custom Utility module.
  */
 
+use Drupal\custom_utility\CommonService;
+
 /**
  * Implements hook_preprocess_HOOK() for node templates.
  */
@@ -16,6 +18,11 @@ function custom_utility_preprocess_node(&$variables) {
       case 'course':
         // Load the custom coure enrol form for course entity.
         $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
+        // Get an instance of your common service.
+        /** @var CommonService */
+        $customService = \Drupal::service('custom_utility.common_service');
+        $course_entity = $variables['node'];
+        $variables['course_percentage'] = $customService->getCoursePercentage($course_entity);
         break;
       case 'lesson':
         // Load the custom lesson complete form for lesson entity.

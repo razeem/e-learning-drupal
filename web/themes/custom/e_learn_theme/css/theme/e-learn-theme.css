@@ -1,0 +1,26 @@
+/* Style the course progress container */
+.course-progress-container {
+  text-align: center;
+  margin: 20px;
+}
+
+/* Style the course progress bar */
+.course-progress-bar {
+  width: 100%;
+  background-color: #ddd;
+  height: 20px;
+  position: relative;
+}
+
+/* Style the filled portion of the progress bar */
+.course-progress-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  /* Change color to your preference */
+}
+
+/* Style the course progress text */
+.course-progress-text {
+  margin-top: 10px;
+  font-weight: bold;
+}

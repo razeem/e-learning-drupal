@@ -56,8 +56,10 @@ final class LessonCompleteForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     // Get the current Node ID.
+
+    /** @var NodeInterface */
     $node = $this->request->attributes->get('node');
-    if($node instanceof NodeInterface && $node->bundle() == 'lesson') {
+    if ($node instanceof NodeInterface && $node->bundle() == 'lesson') {
 
       $lesson_id = $node->id();
       $form['lesson_id'] = [
@@ -78,7 +80,7 @@ final class LessonCompleteForm extends FormBase {
           '#value' => $this->t($query ?  'Already completed!' : 'Mark the lesson as completed'),
         ],
       ];
-      if($query !== FALSE) {
+      if ($query !== FALSE) {
         $form['actions']['submit']['#attributes'] = [
           'readonly' => 'readonly',
           'disabled' => 'disabled',
@@ -108,6 +110,10 @@ final class LessonCompleteForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    /** @var NodeInterface */
+    $node = $this->request->attributes->get('node');
+    $course_obj = $node->field_course[0]->entity;
+
     $course_id = $form_state->getValue('course_id');
     $lesson_id = $form_state->getValue('lesson_id');
     // Check if an entry already exists in the custom table with the same node_id.
@@ -115,9 +121,14 @@ final class LessonCompleteForm extends FormBase {
 
     if ($count !== FALSE) {
       $this->messenger()->addStatus($this->t('Already marked as completed.'));
-    } else {
+    }
+    else {
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id, TRUE);
       $this->messenger()->addStatus($this->t('Lesson Completed successfully.'));
+      if ($this->commonService->getCoursePercentage($course_obj) == 100) {
+        $form_state->setRedirect('entity.node.canonical', ['node' => $course_id]);
+        $this->messenger()->addStatus($this->t('Redirected to Course page as all the lessons are completed.'));
+      }
     }
   }
 }

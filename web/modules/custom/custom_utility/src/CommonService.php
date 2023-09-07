@@ -5,6 +5,7 @@ namespace Drupal\custom_utility;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Service description.
@@ -43,13 +44,13 @@ class CommonService {
 
   function checkCourseLessonEntryExist(string $course_id, string $lesson_id = null): mixed {
     $query = $this->database->select('custom_utility_course_user_table', 'ct')
-    ->fields('ct', ['id'])
-    ->condition('ct.course_id', $course_id);
+      ->fields('ct', ['id'])
+      ->condition('ct.course_id', $course_id);
     if ($lesson_id) {
       $query->condition('ct.lesson_id', $lesson_id);
     }
     $query->condition('ct.user_id', $this->currentUser->id())
-    ->countQuery();
+      ->countQuery();
     $count = $query->execute()
       ->fetchField();
     return $count;
@@ -74,7 +75,6 @@ class CommonService {
       ->execute()
       ->fetchField();
     return $query;
-
   }
 
   function addCourseLessonEntry(string $course_id, string $lesson_id, bool $lesson_completed = FALSE): mixed {
@@ -96,4 +96,24 @@ class CommonService {
     return $query;
   }
 
+
+  function getCompletedLessonCount(string $course_id): int {
+    $query = $this->database->select('custom_utility_course_user_table', 'ct')
+      ->fields('ct', ['id'])
+      ->condition('ct.course_id', $course_id)
+      ->condition('ct.lesson_completed', 1)
+      ->condition('ct.user_id', $this->currentUser->id())
+      ->countQuery();
+    $count = $query->execute()
+      ->fetchField();
+    return $count;
+  }
+
+  function getCoursePercentage(NodeInterface $course): int {
+    $total_lessons = count($course->field_lessons);
+    $lessons_completed = $this->getCompletedLessonCount($course->id());
+    $percentage =
+      ($total_lessons > 0) ? ($lessons_completed / $total_lessons) * 100 : 0;
+    return $percentage;
+  }
 }
