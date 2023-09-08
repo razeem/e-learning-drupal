@@ -6,3 +6,6 @@ global:
     theme:
       css/theme/e-learn-theme.css: {}
       css/theme/print.css: { media: print }
+  dependencies:
+    - core/drupal
+    - core/jquery

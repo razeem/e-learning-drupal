@@ -1,0 +1,11 @@
+custom_utility.controller:
+  path: '/course-completed/{node}'
+  defaults:
+    _controller: '\Drupal\custom_utility\Controller\CertificateGenerateController::content'
+    _title: 'Course Certificate Page'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      node:
+        type: entity:node

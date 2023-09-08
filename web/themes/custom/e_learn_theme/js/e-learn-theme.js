@@ -2,16 +2,17 @@
  * @file
  * E learn Theme behaviors.
  */
-(function (Drupal) {
+(function (Drupal, $) {
 
   'use strict';
 
   Drupal.behaviors.eLearnTheme = {
     attach (context, settings) {
-
-      console.log('It works!');
-
+      $('a.print-certificate', context).on('click', function (e) {
+        window.print();
+        console.log('working');
+      });
     }
   };
 
-} (Drupal));
+} (Drupal, jQuery));

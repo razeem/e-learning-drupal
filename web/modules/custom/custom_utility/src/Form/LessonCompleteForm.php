@@ -7,7 +7,9 @@ namespace Drupal\custom_utility\Form;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Drupal\custom_utility\CommonService;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -85,6 +87,19 @@ final class LessonCompleteForm extends FormBase {
           'readonly' => 'readonly',
           'disabled' => 'disabled',
         ];
+
+        // Create a link to the node.
+        $link = Link::createFromRoute(
+          t('Get the certificate'),
+          'custom_utility.controller',
+          ['node' => $course_id],
+          ['attributes' => ['class' => 'button--primary button']]
+        );
+
+        // Add the link to the form.
+        $form['node_link'] = [
+          '#markup' => $link->toString(),
+        ];
       }
     }
     return $form;
@@ -121,8 +136,7 @@ final class LessonCompleteForm extends FormBase {
 
     if ($count !== FALSE) {
       $this->messenger()->addStatus($this->t('Already marked as completed.'));
-    }
-    else {
+    } else {
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id, TRUE);
       $this->messenger()->addStatus($this->t('Lesson Completed successfully.'));
       if ($this->commonService->getCoursePercentage($course_obj) == 100) {

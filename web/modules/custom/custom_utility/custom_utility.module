@@ -6,6 +6,7 @@
  */
 
 use Drupal\custom_utility\CommonService;
+use Drupal\user\Entity\User;
 
 /**
  * Implements hook_preprocess_HOOK() for node templates.
@@ -14,24 +15,28 @@ function custom_utility_preprocess_node(&$variables) {
   // Check if this is a node page.
   if (isset($variables['node'])) {
     $form = null;
-    switch ($variables['node']->bundle()) {
-      case 'course':
-        // Load the custom coure enrol form for course entity.
-        $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
-        // Get an instance of your common service.
-        /** @var CommonService */
-        $customService = \Drupal::service('custom_utility.common_service');
-        $course_entity = $variables['node'];
-        $variables['course_percentage'] = $customService->getCoursePercentage($course_entity);
-        break;
-      case 'lesson':
-        // Load the custom lesson complete form for lesson entity.
-        $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\LessonCompleteForm');
-        break;
-
-      default:
-        # code...
-        break;
+    // Get the current user.
+    $current_user = User::load(\Drupal::currentUser()->id());
+    // Check if the user has the "student" role.
+    if ($current_user->hasRole('student')) {
+      switch ($variables['node']->bundle()) {
+        case 'course':
+          // You can put your code here for handling the case where the user has the role.
+          // Load the custom coure enrol form for course entity.
+          $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
+          // Get an instance of your common service.
+          /** @var CommonService */
+          $customService = \Drupal::service('custom_utility.common_service');
+          $course_entity = $variables['node'];
+          $variables['course_percentage'] = $customService->getCoursePercentage($course_entity);
+          break;
+        case 'lesson':
+          // Load the custom lesson complete form for lesson entity.
+          $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\LessonCompleteForm');
+          break;
+        default:
+          break;
+      }
     }
     if ($form) {
       // Embed the form in the node's content if form present.

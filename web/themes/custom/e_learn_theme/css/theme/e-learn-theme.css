@@ -1,3 +1,11 @@
+* {
+  -webkit-print-color-adjust: exact !important;
+  /* Chrome, Safari 6 – 15.3, Edge */
+  color-adjust: exact !important;
+  /* Firefox 48 – 96 */
+  print-color-adjust: exact !important;
+  /* Firefox 97+, Safari 15.4+ */
+}
 /* Style the course progress container */
 .course-progress-container {
   text-align: center;
@@ -23,4 +31,41 @@
 .course-progress-text {
   margin-top: 10px;
   font-weight: bold;
+}
+
+/* Certificate style */
+.certificate {
+  background-image: url('../../images/certificate-bg.png');
+  background-size: cover;
+  width: 800px;
+  height: 550px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.content {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.course-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.student-name {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.completion-date {
+  font-size: 18px;
+}
+
+.print-button {
+  margin-top: 30px;
 }

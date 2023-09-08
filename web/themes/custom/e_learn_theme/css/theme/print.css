@@ -1,0 +1,9 @@
+* {
+  visibility: hidden;
+}
+
+/* Show element to print, and any children he has. */
+.print-template,
+.print-template * {
+  visibility: initial;
+}
