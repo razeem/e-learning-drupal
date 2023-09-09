@@ -89,3 +89,14 @@ function custom_utility_node_insert($node) {
     }
   }
 }
+
+/**
+ * Implements hook_theme() to define a theme for the custom dashboard.
+ */
+function custom_utility_theme() {
+  return [
+    'custom_utility_dashboard' => [
+      'variables' => ['content' => NULL],
+    ],
+  ];
+}

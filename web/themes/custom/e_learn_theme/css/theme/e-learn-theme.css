@@ -102,3 +102,19 @@
 .flex-justify-evenly {
   justify-content: space-evenly;
 }
+
+.course-teaser-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.layout-col-1 {
+  flex: 1;
+  padding: 10px;
+}
+
+.layout-col-2 {
+  flex: 2;
+  padding: 10px;
+}

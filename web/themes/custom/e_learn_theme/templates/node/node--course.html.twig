@@ -106,7 +106,7 @@
       <div class="average-grade">
         {% include '@e_learn_theme/includes/star-rating.html.twig' with {'grade': custom_utility__average_grade} %}
         <div class="flex-wrapper flex-justify-evenly">
-          <span>{{ custom_utility__average_grade }} out of 5 stars </span>
+          <span>{{ custom_utility__average_grade | round(1, 'floor') }} out of 5 stars </span>
           {{ content.field_duration }}
         </div>
       </div>

@@ -103,10 +103,16 @@
     {% if custom_utility__average_grade is defined %}
       <div class="average-grade">
         {% include '@e_learn_theme/includes/star-rating.html.twig' with {'grade': custom_utility__average_grade} %}
-        {{ custom_utility__average_grade }} out of 5 stars {{ content.field_duration }}
+        {{ custom_utility__average_grade | round(1, 'floor') }} out of 5 stars {{ content.field_duration }}
       </div>
     {% endif %}
-
-    {{ content|without('field_image', 'links') }}
+      <div class="course-teaser-container my-2">
+        <div class="layout-col-1">
+          {{ content.field_media_image }}
+        </div>
+        <div class="layout-col-2">
+          {{ content.body }}
+        </div>
+      </div>
   </div>
 </article>

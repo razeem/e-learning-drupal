@@ -9,3 +9,10 @@ custom_utility.controller:
     parameters:
       node:
         type: entity:node
+custom_utility.dashboard:
+  path: '/dashboard'
+  defaults:
+    _controller: 'Drupal\custom_utility\Controller\DashboardController::dashboard'
+    _title: 'User Dashboard'
+  requirements:
+    _permission: 'access content'
