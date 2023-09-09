@@ -17,18 +17,19 @@ function custom_utility_preprocess_node(&$variables) {
     $form = null;
     // Get the current user.
     $current_user = User::load(\Drupal::currentUser()->id());
+    $node = $variables['node'];
     // Check if the user has the "student" role.
+    // Get an instance of your common service.
+    /** @var CommonService */
+    $common_service = \Drupal::service('custom_utility.common_service');
     if ($current_user->hasRole('student')) {
-      switch ($variables['node']->bundle()) {
+      switch ($node->bundle()) {
         case 'course':
           // You can put your code here for handling the case where the user has the role.
           // Load the custom coure enrol form for course entity.
           $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
-          // Get an instance of your common service.
-          /** @var CommonService */
-          $customService = \Drupal::service('custom_utility.common_service');
-          $course_entity = $variables['node'];
-          $variables['course_percentage'] = $customService->getCoursePercentage($course_entity);
+          $course_entity = $node;
+          $variables['course_percentage'] = $common_service->getCoursePercentage($course_entity);
           break;
         case 'lesson':
           // Load the custom lesson complete form for lesson entity.
@@ -38,10 +39,15 @@ function custom_utility_preprocess_node(&$variables) {
           break;
       }
     }
-    if ($current_user->hasRole('instructor') && $variables['node']->bundle() == 'course') {
+    if ($current_user->hasRole('instructor') && $node->bundle() == 'course') {
       // Load the custom lesson complete form for lesson entity.
       $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseGradeForm');
     }
+    if ($node->bundle() == 'course') {
+      // Add the average grade render array to the node's content.
+      $variables['custom_utility__average_grade'] = $common_service->getAverageCourseGrade($node->id());
+    }
+
 
     if ($form) {
       // Embed the form in the node's content if form present.

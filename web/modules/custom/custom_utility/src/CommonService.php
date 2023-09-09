@@ -141,4 +141,16 @@ class CommonService {
       ->condition('ct.user_id', $this->currentUser->id());
     return $query->execute()->fetchField();
   }
+
+  function getAverageCourseGrade(string $course_id): mixed {
+    $query = $this->database->select('custom_utility_course_grade_table', 'cgt');
+    $query->addExpression('AVG(cgt.course_grade)', 'average_score');
+    $query->condition('cgt.course_id', $course_id);
+    $query->groupBy('cgt.course_id'); // Group by course_id
+    $queryString = $query->__toString();
+
+    // Execute the query and get the average score.
+    $result = $query->execute();
+    return $result->fetchField();
+  }
 }
