@@ -88,18 +88,6 @@ final class LessonCompleteForm extends FormBase {
           'disabled' => 'disabled',
         ];
 
-        // Create a link to the node.
-        $link = Link::createFromRoute(
-          t('Get the certificate'),
-          'custom_utility.controller',
-          ['node' => $course_id],
-          ['attributes' => ['class' => 'button--primary button']]
-        );
-
-        // Add the link to the form.
-        $form['node_link'] = [
-          '#markup' => $link->toString(),
-        ];
       }
     }
     return $form;
@@ -140,6 +128,7 @@ final class LessonCompleteForm extends FormBase {
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id, TRUE);
       $this->messenger()->addStatus($this->t('Lesson Completed successfully.'));
       if ($this->commonService->getCoursePercentage($course_obj) == 100) {
+        $this->commonService->addCourseCompletionEntry($course_id, $lesson_id, TRUE);
         $form_state->setRedirect('entity.node.canonical', ['node' => $course_id]);
         $this->messenger()->addStatus($this->t('Redirected to Course page as all the lessons are completed.'));
       }

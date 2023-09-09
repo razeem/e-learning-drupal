@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Olivero's theme implementation to display a node teaser.
+ * Olivero's theme implementation to display a node.
  *
  * Available variables:
  * - node: The node entity with limited access to object properties and methods.
@@ -67,46 +67,74 @@
  */
 #}
 
+{% set layout = layout ? 'layout--' ~ layout|clean_class %}
+
 {%
   set classes = [
     'node',
     'node--type-' ~ node.bundle|clean_class,
+    layout ? 'grid-full',
     node.isPromoted() ? 'node--promoted',
     node.isSticky() ? 'node--sticky',
     not node.isPublished() ? 'node--unpublished',
     view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
   ]
 %}
-
 <article{{ attributes.addClass(classes) }}>
-  <header>
+  <header class="{{ layout }}">
     {{ title_prefix }}
+      {% if label and not page %}
+      <h2{{ title_attributes.addClass('node__title') }}>
+        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h2>
+    {% endif %}
     {{ title_suffix }}
     {% if display_submitted %}
       <div class="node__meta">
+        {% if author_picture %}
+          <div class="node__author-image">
+            {{ author_picture }}
+          </div>
+        {% endif %}
         <span{{ author_attributes }}>
-          {{ 'By'|t }} {% apply spaceless %}<span class="node__author">{{ author_name }}</span>{% endapply %}, {{ date }}
+          {{ 'By'|t }} {% apply spaceless %}{{ author_name }}{% endapply %}, {{ date }}
         </span>
         {{ metadata }}
       </div>
     {% endif %}
-    {% if label and not page %}
-      <div class="node__top-wrapper">
-        {{ content.field_image }}
-        <h2{{ title_attributes.addClass('node__title') }}>
-          <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-        </h2>
-      </div>
-    {% endif %}
-  </header>
-  <div{{ content_attributes.addClass('node__content') }}>
     {% if custom_utility__average_grade is defined %}
       <div class="average-grade">
         {% include '@e_learn_theme/includes/star-rating.html.twig' with {'grade': custom_utility__average_grade} %}
-        {{ custom_utility__average_grade }} out of 5 stars {{ content.field_duration }}
+        <div class="flex-wrapper flex-justify-evenly">
+          <span>{{ custom_utility__average_grade }} out of 5 stars </span>
+          {{ content.field_duration }}
+        </div>
       </div>
     {% endif %}
-
-    {{ content|without('field_image', 'links') }}
+    <div class="flex-wrapper flex-column my-2">
+      {% if course_percentage is defined %}
+        <div>
+          <div class="course-progress-bar">
+            <div class="course-progress-fill" style="width: {{ course_percentage }}%;"></div>
+          </div>
+          <p class="course-progress-text">{{ course_percentage }} % Complete</p>
+        </div>
+      {% endif %}
+      <div class="flex-wrapper">
+        {{ content.custom_form }}
+        {% if course_percentage is defined and course_percentage == 100 %}
+          {{ get_certificate }}
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  <div{{ content_attributes.addClass('node__content', layout) }}>
+    {# Comments not part of content, so they won't inherit .text-content styles. #}
+    {{ content|without('comment', 'custom_form', 'field_duration') }}
   </div>
+  {% if content.comment %}
+    <div id="comments" class="{{ layout }}">
+      {{ content.comment }}
+    </div>
+  {% endif %}
 </article>

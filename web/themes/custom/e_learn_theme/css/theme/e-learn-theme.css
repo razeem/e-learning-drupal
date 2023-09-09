@@ -86,7 +86,19 @@
   transition: background-color 0.3s;
 }
 
-.star-wrapper {
+.flex-wrapper {
   display: flex;
   justify-content: space-between;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.my-2 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.flex-justify-evenly {
+  justify-content: space-evenly;
 }

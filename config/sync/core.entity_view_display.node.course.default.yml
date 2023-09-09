@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.course.body
+    - field.field.node.course.field_duration
     - field.field.node.course.field_lessons
     - field.field.node.course.field_media_image
     - node.type.course
@@ -21,6 +22,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 101
+    region: content
+  field_duration:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 104
     region: content
   field_lessons:
     type: entity_reference_label

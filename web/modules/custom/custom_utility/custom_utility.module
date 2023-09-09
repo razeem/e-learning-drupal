@@ -5,6 +5,7 @@
  * Primary module hooks for Custom Utility module.
  */
 
+use Drupal\Core\Link;
 use Drupal\custom_utility\CommonService;
 use Drupal\user\Entity\User;
 
@@ -30,6 +31,18 @@ function custom_utility_preprocess_node(&$variables) {
           $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseEnrolForm');
           $course_entity = $node;
           $variables['course_percentage'] = $common_service->getCoursePercentage($course_entity);
+          // Create a link to the node.
+          $link = Link::createFromRoute(
+            t('Get the certificate'),
+            'custom_utility.controller',
+            ['node' => $course_entity->id()],
+            ['attributes' => ['class' => 'button--primary button']]
+          );
+
+          // Add the link to the form.
+          $variables['get_certificate'] = [
+            '#markup' => $link->toString(),
+          ];
           break;
         case 'lesson':
           // Load the custom lesson complete form for lesson entity.

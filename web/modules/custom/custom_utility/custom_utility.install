@@ -36,13 +36,13 @@ function custom_utility_install() {
         'unsigned' => TRUE,
         'description' => 'User ID',
       ],
-      'current_course' => [
+      'lesson_completed' => [
         'type' => 'int', // Add a boolean field.
         'size' => 'tiny', // Add a boolean field.
         'unsigned' => TRUE,
         'default' => 0, // Set the default value to FALSE.
         'not null' => TRUE,
-        'description' => 'Is current course',
+        'description' => 'Is lesson Completed',
       ],
       'created_date' => [
         'type' => 'varchar',

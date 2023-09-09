@@ -54,15 +54,6 @@ class CommonService {
     $count = $query->execute()
       ->fetchField();
     return $count;
-
-    // $query = $this->database->select('custom_utility_course_user_table', 'ct')
-    //   ->fields('ct', ['id'])
-    //   ->condition('ct.course_id', $course_id)
-    //   ->condition('ct.user_id', $this->currentUser->id())
-    //   ->execute()
-    //   ->fetchField();
-    // return $query;
-
   }
 
   function checkCourseLessonCompleted(string $course_id, string $lesson_id): mixed {
@@ -96,6 +87,30 @@ class CommonService {
     return $query;
   }
 
+  function addCourseCompletionEntry(string $course_id): void {
+    $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
+
+    // Define the data to be inserted.
+    $data = [
+      'course_id' => $course_id,
+      'user_id' => $this->currentUser->id(),
+      'completion_date' => $creation_date,
+    ];
+
+    // Insert the data into custom_utility_course_user_table.
+    $this->database->insert('custom_utility_course_completion_table')
+      ->fields($data)
+      ->execute();
+  }
+
+  function getCompletionDate(string $course_id): string {
+    $query = $this->database->select('custom_utility_course_completion_table', 'ct')
+      ->fields('ct', ['completion_date'])
+      ->condition('ct.course_id', $course_id)
+      ->condition('ct.user_id', $this->currentUser->id());
+    return $query->execute()
+      ->fetchField();
+  }
 
   function getCompletedLessonCount(string $course_id): int {
     $query = $this->database->select('custom_utility_course_user_table', 'ct')
