@@ -60,6 +60,8 @@ class CustomTableFilter extends StringFilter {
     $nids = $common_service->getCourseNidsFromCustom($option);
     if (count($nids) > 0) {
       $query->addWhere($this->options['group'], $table . '.nid', $nids, 'IN');
+    } else {
+      $query->addWhere($this->options['group'], $table . '.nid', '', '=');
     }
   }
 }
