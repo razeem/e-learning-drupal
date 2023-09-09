@@ -10,7 +10,7 @@ custom_utility.controller:
       node:
         type: entity:node
 custom_utility.dashboard:
-  path: '/dashboard'
+  path: '/user-dashboard'
   defaults:
     _controller: 'Drupal\custom_utility\Controller\DashboardController::dashboard'
     _title: 'User Dashboard'

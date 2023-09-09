@@ -119,6 +119,7 @@ final class CourseEnrolForm extends FormBase {
     if ($count !== FALSE) {
       $this->messenger()->addStatus($this->t('Already Enrolled.'));
     } else {
+      $this->commonService->addCourseCompletionEntry($course_id);
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id);
       $this->messenger()->addStatus($this->t('Enrolled for the course successfully.'));
     }

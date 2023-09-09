@@ -1,0 +1,10 @@
+uuid: 3931c05b-6aed-48af-950e-1e304d524d1a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.dashboard
+label: Dashboard
+targetEntityType: node
+cache: true

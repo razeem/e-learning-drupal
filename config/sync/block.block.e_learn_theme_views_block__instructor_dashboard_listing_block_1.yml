@@ -1,0 +1,29 @@
+uuid: 19c430cb-9c93-4a2e-baa8-ffd6ff1122fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.instructor_dashboard_listing
+  module:
+    - system
+    - views
+  theme:
+    - e_learn_theme
+id: e_learn_theme_views_block__instructor_dashboard_listing_block_1
+theme: e_learn_theme
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:instructor_dashboard_listing-block_1'
+settings:
+  id: 'views_block:instructor_dashboard_listing-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /user-dashboard

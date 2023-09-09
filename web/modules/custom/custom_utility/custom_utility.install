@@ -81,6 +81,14 @@ function custom_utility_install() {
         'unsigned' => TRUE,
         'description' => 'User ID',
       ],
+      'completed' => [
+        'type' => 'int', // Add a boolean field.
+        'size' => 'tiny', // Add a boolean field.
+        'unsigned' => TRUE,
+        'default' => 0, // Set the default value to FALSE.
+        'not null' => TRUE,
+        'description' => 'If the course is completed',
+      ],
       'completion_date' => [
         'type' => 'varchar',
         'mysql_type' => 'datetime',

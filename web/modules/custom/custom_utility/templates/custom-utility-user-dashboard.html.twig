@@ -1,12 +1,12 @@
 <div class="dashboard">
-	<h2>{{ 'User Dashboard'|t }}</h2>
+	<h2>{{ content.page_title }}</h2>
 	<div class="dashboard-content">
 		{% if content.message %}
 			<div class="message">{{ content.message }}</div>
 		{% endif %}
 		{% if content %}
 			<div class="user-specific-content">
-				{{ content|without('message') }}
+				{{ content|without('message', 'page_title') }}
 			</div>
 		{% else %}
 			<p>No data available for this user role.</p>

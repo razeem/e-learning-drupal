@@ -32,27 +32,20 @@ class DashboardController extends ControllerBase {
   public function dashboard() {
     // Determine the user's role.
     $roles = $this->currentUser->getRoles();
+    $message = [
+      'student' => 'Student',
+      'instructor' => 'Instructor',
+      'administrator' => 'Administrator',
+    ];
 
     // Load and display user-specific data based on their role.
     $content = [];
-
-    if (in_array('student', $roles)) {
-      $content['message'] = 'Welcome, Student!';
-      // Load and display student-specific data here.
-    }
-    elseif (in_array('instructor', $roles)) {
-      $content['message'] = 'Welcome, Instructor!';
-      // Load and display instructor-specific data here.
-    }
-    elseif (in_array('administrator', $roles)) {
-      $content['message'] = 'Welcome, Administrator!';
-      // Load and display administrator-specific data here.
-    }
+    $content['page_title'] = $message[$roles[1]] . ' Dashboard';
+    $content['message'] = 'Welcome, ' . $this->currentUser->getDisplayName();
 
     return [
-      '#theme' => 'dashboard_example_dashboard', // Adjust to your theme name.
+      '#theme' => 'custom_utility_user_dashboard',
       '#content' => $content,
     ];
   }
-
 }

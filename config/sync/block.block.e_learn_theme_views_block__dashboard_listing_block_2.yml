@@ -1,0 +1,29 @@
+uuid: 184605c2-17f1-4ef7-b4ce-e64a30d5ba70
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.dashboard_listing
+  module:
+    - system
+    - views
+  theme:
+    - e_learn_theme
+id: e_learn_theme_views_block__dashboard_listing_block_2
+theme: e_learn_theme
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:dashboard_listing-block_2'
+settings:
+  id: 'views_block:dashboard_listing-block_2'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /user-dashboard

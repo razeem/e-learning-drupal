@@ -5,6 +5,7 @@
  * Primary module hooks for Custom Utility module.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\custom_utility\CommonService;
 use Drupal\user\Entity\User;
@@ -93,10 +94,46 @@ function custom_utility_node_insert($node) {
 /**
  * Implements hook_theme() to define a theme for the custom dashboard.
  */
-function custom_utility_theme() {
+function custom_utility_theme($existing, $type, $theme, $path) {
   return [
-    'custom_utility_dashboard' => [
-      'variables' => ['content' => NULL],
+    'custom_utility_user_dashboard' => [
+      'variables' => [
+        'content' => ''
+      ],
     ],
   ];
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function custom_utility_views_data() {
+  $data = [];
+
+  $data['node']['custom_utility_table_query'] = [
+    'title' => t('Query IDs from custom table and pass it to views'),
+    'filter' => [
+      'title' => t('Query IDs from custom table and pass it to views'),
+      'field' => 'id',
+      'id' => 'custom_utility_table_query',
+    ],
+  ];
+
+  return $data;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function custom_utility_form_user_login_form_alter(&$form, FormStateInterface $form_state) {
+  $form['#submit'][] = '_custom_utility_user_login_submit';
+}
+
+/**
+ * Form submission handler for user_login_form().
+ *
+ * Redirects the user to the dashboard after logging in.
+ */
+function _custom_utility_user_login_submit(&$form, FormStateInterface $form_state) {
+  $form_state->setRedirect('custom_utility.dashboard');
 }

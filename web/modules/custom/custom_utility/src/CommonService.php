@@ -87,19 +87,17 @@ class CommonService {
     return $query;
   }
 
-  function addCourseCompletionEntry(string $course_id): void {
+  function addCourseCompletionEntry(string $course_id, int $lesson_completed = 0): void {
     $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
-
-    // Define the data to be inserted.
-    $data = [
-      'course_id' => $course_id,
-      'user_id' => $this->currentUser->id(),
-      'completion_date' => $creation_date,
-    ];
-
-    // Insert the data into custom_utility_course_user_table.
-    $this->database->insert('custom_utility_course_completion_table')
-      ->fields($data)
+    $this->database->merge('custom_utility_course_completion_table')
+      ->key([
+        'course_id' => $course_id,
+        'user_id' => $this->currentUser->id(),
+      ])
+      ->fields([
+        'completed' => $lesson_completed,
+        'completion_date' => $creation_date,
+      ])
       ->execute();
   }
 
@@ -167,5 +165,60 @@ class CommonService {
     // Execute the query and get the average score.
     $result = $query->execute();
     return $result->fetchField();
+  }
+
+  function getCourseNidsFromCustom(string $option): array {
+    $return_obj = null;
+    $return_assoc = [];
+    switch ($option) {
+      case 'courses_enrolled':
+        $query = $this->database->select('custom_utility_course_completion_table', 'cct')
+          ->fields('cct', ['course_id'])
+          ->condition('cct.completed', 0)
+          ->condition('cct.user_id', $this->currentUser->id());
+        $result = $query->execute();
+        $return_obj = $result->fetchAll();
+
+        break;
+      case 'courses_completed':
+        $query = $this->database->select('custom_utility_course_completion_table', 'cct')
+          ->fields('cct', ['course_id'])
+          ->condition('cct.completed', 1)
+          ->condition('cct.user_id', $this->currentUser->id());
+        $result = $query->execute();
+        $return_obj = $result->fetchAll();
+
+        break;
+      case 'courses_not_graded':
+        $query = $this->database->select('custom_utility_course_grade_table', 'cct')
+          ->fields('cct', ['course_id'])
+          ->condition('cct.user_id', $this->currentUser->id());
+        $result = $query->execute();
+        $return_obj = $result->fetchAll();
+        $exclude_nids = $this->parseArrayObject($return_obj);
+        // Node Query @ToDo later these 2 queries can be merged to an optimised
+        // one using Join
+        $nodeQuery = $this->database->select('node', 'n');
+        $nodeQuery->addExpression('n.nid', 'course_id');
+        $nodeQuery->condition('n.type', 'course');
+        if ($exclude_nids) {
+          $nodeQuery->condition('n.nid', $exclude_nids, 'NOT IN');
+        }
+        $return_obj = $nodeQuery->execute()->fetchAll();
+        break;
+      default:
+        break;
+    }
+    if ($return_obj) {
+      $return_assoc = $this->parseArrayObject($return_obj);
+    }
+    return $return_assoc;
+  }
+
+  protected function parseArrayObject($return_obj): array {
+    return
+      array_map(function ($object) {
+        return $object->course_id;
+      }, $return_obj);
   }
 }
