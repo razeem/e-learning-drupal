@@ -1,9 +1,61 @@
 uuid: cfd17b42-8ebe-449d-a395-914cc9e6760e
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - media.type.image
+    - media.type.remote_video
+    - media.type.video
+    - node.type.course
+    - node.type.lesson
+  module:
+    - media
+    - node
+    - path
+    - system
+    - toolbar
 id: instructor
 label: Instructor
 weight: -7
 is_admin: null
-permissions: {  }
+permissions:
+  - 'access administration pages'
+  - 'access content overview'
+  - 'access media overview'
+  - 'access toolbar'
+  - 'administer url aliases'
+  - 'create course content'
+  - 'create image media'
+  - 'create lesson content'
+  - 'create remote_video media'
+  - 'create url aliases'
+  - 'create video media'
+  - 'delete any course content'
+  - 'delete any image media'
+  - 'delete any lesson content'
+  - 'delete any remote_video media'
+  - 'delete any video media'
+  - 'delete course revisions'
+  - 'delete lesson revisions'
+  - 'delete media'
+  - 'delete own course content'
+  - 'delete own image media'
+  - 'delete own lesson content'
+  - 'delete own remote_video media'
+  - 'delete own video media'
+  - 'edit any course content'
+  - 'edit any image media'
+  - 'edit any lesson content'
+  - 'edit any remote_video media'
+  - 'edit any video media'
+  - 'edit own course content'
+  - 'edit own image media'
+  - 'edit own lesson content'
+  - 'edit own remote_video media'
+  - 'edit own video media'
+  - 'revert course revisions'
+  - 'revert lesson revisions'
+  - 'update media'
+  - 'view course revisions'
+  - 'view lesson revisions'
+  - 'view the administration theme'

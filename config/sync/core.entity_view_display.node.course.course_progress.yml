@@ -1,0 +1,30 @@
+uuid: 80e45137-8d03-49af-b8df-49327d963dba
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.course_progress
+    - field.field.node.course.body
+    - field.field.node.course.field_lessons
+    - field.field.node.course.field_media_image
+    - node.type.course
+  module:
+    - text
+    - user
+id: node.course.course_progress
+targetEntityType: node
+bundle: course
+mode: course_progress
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 100
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_lessons: true
+  field_media_image: true
+  links: true

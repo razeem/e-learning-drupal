@@ -1,0 +1,10 @@
+uuid: e9c5c3c8-746b-4cf1-9be7-04b2024902b0
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.course_progress
+label: 'Course Progress'
+targetEntityType: node
+cache: true

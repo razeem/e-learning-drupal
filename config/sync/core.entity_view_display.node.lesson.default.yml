@@ -21,15 +21,16 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 101
+    weight: 1
     region: content
   field_course:
-    type: entity_reference_label
-    label: above
+    type: entity_reference_entity_view
+    label: hidden
     settings:
-      link: true
+      view_mode: course_progress
+      link: false
     third_party_settings: {  }
-    weight: 103
+    weight: 0
     region: content
   field_lesson_medias:
     type: entity_reference_revisions_entity_view
@@ -38,11 +39,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 102
+    weight: 2
     region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-hidden: {  }
+hidden:
+  links: true

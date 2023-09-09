@@ -7,7 +7,7 @@ use Drupal\Core\Database\Database;
  * Install, update and uninstall functions for the Custom Utility module.
  */
 function custom_utility_install() {
-  $spec = [
+  $course_lesson_table = [
     'description' => 'Course, Lesson to User Mapping Table.',
     'fields' => [
       'id' => [
@@ -59,6 +59,78 @@ function custom_utility_install() {
     ],
     'primary key' => ['id'],
   ];
+  $course_completion_table = [
+    'description' => 'Course Completion Table.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key',
+      ],
+      'course_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+        'description' => 'Course Node ID',
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+        'description' => 'User ID',
+      ],
+      'course_grade' => [
+        'type' => 'int', // Add a boolean field.
+        'size' => 'tiny', // Add a boolean field.
+        'unsigned' => TRUE,
+        'default' => 0, // Set the default value to FALSE.
+        'not null' => TRUE,
+        'description' => 'Grade of the course out of 5',
+      ],
+      'completion_date' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+        'description' => 'Completion Date Time',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+  $course_grade_table = [
+    'description' => 'Course Grade Table.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key',
+      ],
+      'course_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+        'description' => 'Course Node ID',
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => '0',
+        'unsigned' => TRUE,
+        'description' => 'User ID',
+      ],
+      'created_date' => [
+        'type' => 'varchar',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+        'description' => 'Created Date Time',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
   $schema = Database::getConnection()->schema();
-  $schema->createTable('custom_utility_course_user_table', $spec);
+  $schema->createTable('custom_utility_course_user_table', $course_lesson_table);
+  $schema->createTable('custom_utility_course_completion_table', $course_completion_table);
+  $schema->createTable('custom_utility_course_grade_table', $course_grade_table);
 }
