@@ -116,4 +116,29 @@ class CommonService {
       ($total_lessons > 0) ? ($lessons_completed / $total_lessons) * 100 : 0;
     return $percentage;
   }
+
+  function addCourseGradeEntry(string $course_id, int $grade): mixed {
+    $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
+
+    // Insert data into the custom course user table.
+    $query = $this->database->merge('custom_utility_course_grade_table')
+      ->key([
+        'course_id' => $course_id,
+        'user_id' => $this->currentUser->id(),
+      ])
+      ->fields([
+        'course_grade' => $grade,
+        'created_date' => $creation_date,
+      ])
+      ->execute();
+    return $query;
+  }
+
+  function getCourseGrade(string $course_id): mixed {
+    $query = $this->database->select('custom_utility_course_grade_table', 'ct')
+      ->fields('ct', ['course_grade'])
+      ->condition('ct.course_id', $course_id)
+      ->condition('ct.user_id', $this->currentUser->id());
+    return $query->execute()->fetchField();
+  }
 }

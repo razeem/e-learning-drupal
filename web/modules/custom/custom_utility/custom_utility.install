@@ -81,14 +81,6 @@ function custom_utility_install() {
         'unsigned' => TRUE,
         'description' => 'User ID',
       ],
-      'course_grade' => [
-        'type' => 'int', // Add a boolean field.
-        'size' => 'tiny', // Add a boolean field.
-        'unsigned' => TRUE,
-        'default' => 0, // Set the default value to FALSE.
-        'not null' => TRUE,
-        'description' => 'Grade of the course out of 5',
-      ],
       'completion_date' => [
         'type' => 'varchar',
         'mysql_type' => 'datetime',
@@ -119,6 +111,14 @@ function custom_utility_install() {
         'default' => '0',
         'unsigned' => TRUE,
         'description' => 'User ID',
+      ],
+      'course_grade' => [
+        'type' => 'int', // Add a boolean field.
+        'size' => 'tiny', // Add a boolean field.
+        'unsigned' => TRUE,
+        'default' => 0, // Set the default value to FALSE.
+        'not null' => TRUE,
+        'description' => 'Grade of the course out of 5',
       ],
       'created_date' => [
         'type' => 'varchar',

@@ -38,6 +38,11 @@ function custom_utility_preprocess_node(&$variables) {
           break;
       }
     }
+    if ($current_user->hasRole('instructor') && $variables['node']->bundle() == 'course') {
+      // Load the custom lesson complete form for lesson entity.
+      $form = \Drupal::formBuilder()->getForm('Drupal\custom_utility\Form\CourseGradeForm');
+    }
+
     if ($form) {
       // Embed the form in the node's content if form present.
       $variables['content']['custom_form'] = $form;
