@@ -87,7 +87,6 @@ final class LessonCompleteForm extends FormBase {
           'readonly' => 'readonly',
           'disabled' => 'disabled',
         ];
-
       }
     }
     return $form;
@@ -128,7 +127,7 @@ final class LessonCompleteForm extends FormBase {
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id, TRUE);
       $this->messenger()->addStatus($this->t('Lesson Completed successfully.'));
       if ($this->commonService->getCoursePercentage($course_obj) == 100) {
-        $this->commonService->addCourseCompletionEntry($course_id, $lesson_id, TRUE);
+        $this->commonService->addCourseCompletionEntry($course_id, 1);
         $form_state->setRedirect('entity.node.canonical', ['node' => $course_id]);
         $this->messenger()->addStatus($this->t('Redirected to Course page as all the lessons are completed.'));
       }
