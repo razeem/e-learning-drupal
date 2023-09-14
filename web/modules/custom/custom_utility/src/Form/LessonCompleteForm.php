@@ -7,9 +7,7 @@ namespace Drupal\custom_utility\Form;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Url;
 use Drupal\custom_utility\CommonService;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,11 +18,26 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class LessonCompleteForm extends FormBase {
 
+  /**
+   * Current User Object.
+   */
   protected AccountProxyInterface $currentUser;
+  /**
+   * Common Service Object.
+   */
   protected CommonService $commonService;
+  /**
+   * Database connection Object.
+   */
   protected Connection $database;
+  /**
+   * Symfony Request Object.
+   */
   protected Request $request;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(
     AccountProxyInterface $current_user,
     CommonService $common_service,
@@ -37,6 +50,9 @@ final class LessonCompleteForm extends FormBase {
     $this->request = $request;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_user'),
@@ -59,7 +75,7 @@ final class LessonCompleteForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state): array {
     // Get the current Node ID.
 
-    /** @var NodeInterface */
+    /** @var \Drupal\node\NodeInterface */
     $node = $this->request->attributes->get('node');
     if ($node instanceof NodeInterface && $node->bundle() == 'lesson') {
 
@@ -79,7 +95,7 @@ final class LessonCompleteForm extends FormBase {
         '#type' => 'actions',
         'submit' => [
           '#type' => 'submit',
-          '#value' => $this->t($query ?  'Already completed!' : 'Mark the lesson as completed'),
+          '#value' => $query ? 'Already completed!' : 'Mark the lesson as completed',
         ],
       ];
       if ($query !== FALSE) {
@@ -112,18 +128,19 @@ final class LessonCompleteForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    /** @var NodeInterface */
+    /** @var \Drupal\node\NodeInterface */
     $node = $this->request->attributes->get('node');
     $course_obj = $node->field_course[0]->entity;
 
     $course_id = $form_state->getValue('course_id');
     $lesson_id = $form_state->getValue('lesson_id');
-    // Check if an entry already exists in the custom table with the same node_id.
+    // Check if an entry already exists in the custom table with the same id.
     $count = $this->commonService->checkCourseLessonCompleted($course_id, $lesson_id);
 
     if ($count !== FALSE) {
       $this->messenger()->addStatus($this->t('Already marked as completed.'));
-    } else {
+    }
+    else {
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id, TRUE);
       $this->messenger()->addStatus($this->t('Lesson Completed successfully.'));
       if ($this->commonService->getCoursePercentage($course_obj) == 100) {
@@ -133,4 +150,5 @@ final class LessonCompleteForm extends FormBase {
       }
     }
   }
+
 }

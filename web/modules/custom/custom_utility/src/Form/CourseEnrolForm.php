@@ -18,12 +18,26 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class CourseEnrolForm extends FormBase {
 
-
+  /**
+   * Current User Object.
+   */
   protected AccountProxyInterface $currentUser;
+  /**
+   * Common Service Object.
+   */
   protected CommonService $commonService;
+  /**
+   * Database connection Object.
+   */
   protected Connection $database;
+  /**
+   * Symfony Request Object.
+   */
   protected Request $request;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(
     AccountProxyInterface $current_user,
     CommonService $common_service,
@@ -36,6 +50,9 @@ final class CourseEnrolForm extends FormBase {
     $this->request = $request;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_user'),
@@ -72,12 +89,12 @@ final class CourseEnrolForm extends FormBase {
         '#value' => $lesson_id,
       ];
       $query = $this->commonService->checkCourseLessonEntryExist($course_id);
-
+      $submit_text = $query ? 'Already Enrolled!' : 'Enroll For this course';
       $form['actions'] = [
         '#type' => 'actions',
         'submit' => [
           '#type' => 'submit',
-          '#value' => $this->t($query ?  'Already Enrolled!' : 'Enroll For this course'),
+          '#value' => $submit_text,
         ],
       ];
 
@@ -113,15 +130,17 @@ final class CourseEnrolForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $course_id = $form_state->getValue('course_id');
     $lesson_id = $form_state->getValue('lesson_id');
-    // Check if an entry already exists in the custom table with the same node_id.
+    // Check if an entry already exists in the custom table with the same id.
     $count = $this->commonService->checkCourseLessonEntryExist($course_id);
 
     if ($count !== FALSE) {
       $this->messenger()->addStatus($this->t('Already Enrolled.'));
-    } else {
+    }
+    else {
       $this->commonService->addCourseCompletionEntry($course_id);
       $this->commonService->addCourseLessonEntry($course_id, $lesson_id);
       $this->messenger()->addStatus($this->t('Enrolled for the course successfully.'));
     }
   }
+
 }

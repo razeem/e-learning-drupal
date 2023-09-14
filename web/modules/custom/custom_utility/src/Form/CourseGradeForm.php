@@ -18,12 +18,26 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class CourseGradeForm extends FormBase {
 
-
+  /**
+   * Current User Object.
+   */
   protected AccountProxyInterface $currentUser;
+  /**
+   * Common Service Object.
+   */
   protected CommonService $commonService;
+  /**
+   * Database connection Object.
+   */
   protected Connection $database;
+  /**
+   * Symfony Request Object.
+   */
   protected Request $request;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(
     AccountProxyInterface $current_user,
     CommonService $common_service,
@@ -36,6 +50,9 @@ final class CourseGradeForm extends FormBase {
     $this->request = $request;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('current_user'),
@@ -78,7 +95,7 @@ final class CourseGradeForm extends FormBase {
           '4' => $this->t('4 stars'),
           '5' => $this->t('5 stars'),
         ],
-        '#required' => true,
+        '#required' => TRUE,
       ];
 
       $form['actions'] = [
@@ -115,7 +132,8 @@ final class CourseGradeForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $course_id = $form_state->getValue('course_id');
     $grade = $form_state->getValue('grade');
-    $this->commonService->addCourseGradeEntry($course_id, (int)$grade);
+    $this->commonService->addCourseGradeEntry($course_id, (int) $grade);
     $this->messenger()->addStatus($this->t('Course Grade submitted successfully.'));
   }
+
 }

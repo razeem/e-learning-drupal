@@ -4,12 +4,22 @@ namespace Drupal\custom_utility\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * {@inheritdoc}
+ */
 class DashboardController extends ControllerBase {
 
-  protected $currentUser;
+  /**
+   * Current User Object.
+   */
+  protected AccountProxyInterface $currentUser;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(AccountInterface $current_user) {
     $this->currentUser = $current_user;
   }
@@ -48,4 +58,5 @@ class DashboardController extends ControllerBase {
       '#content' => $content,
     ];
   }
+
 }

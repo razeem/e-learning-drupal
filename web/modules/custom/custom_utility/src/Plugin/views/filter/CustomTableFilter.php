@@ -3,7 +3,6 @@
 namespace Drupal\custom_utility\Plugin\views\filter;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\custom_utility\CommonService;
 use Drupal\views\Plugin\views\filter\StringFilter;
 
 /**
@@ -54,14 +53,16 @@ class CustomTableFilter extends StringFilter {
     $query = $this->query;
     $table = array_key_first($query->tables);
 
-    /** @var CommonService */
+    /** @var \Drupal\custom_utility\CommonService */
     $common_service = \Drupal::service('custom_utility.common_service');
     $option = $this->options['custom_utility_table_query_option'];
     $nids = $common_service->getCourseNidsFromCustom($option);
     if (count($nids) > 0) {
       $query->addWhere($this->options['group'], $table . '.nid', $nids, 'IN');
-    } else {
+    }
+    else {
       $query->addWhere($this->options['group'], $table . '.nid', '', '=');
     }
   }
+
 }

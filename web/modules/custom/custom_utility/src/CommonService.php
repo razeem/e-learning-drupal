@@ -12,7 +12,14 @@ use Drupal\node\NodeInterface;
  */
 class CommonService {
 
+  /**
+   * Current User Object.
+   */
   protected AccountProxyInterface $currentUser;
+
+  /**
+   * Database connection Object.
+   */
   protected Connection $database;
 
   /**
@@ -25,11 +32,11 @@ class CommonService {
   /**
    * Constructs a CommonService object.
    *
-   * @param AccountProxyInterface $current_user
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
-   * @param Connection $database
+   * @param \Drupal\Core\Database\Connection $database
    *   The database connector.
-   * @param EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
   public function __construct(
@@ -42,7 +49,10 @@ class CommonService {
     $this->entityTypeManager = $entity_type_manager;
   }
 
-  function checkCourseLessonEntryExist(string $course_id, string $lesson_id = null): mixed {
+  /**
+   * Checks if Course lesson entry exist.
+   */
+  public function checkCourseLessonEntryExist(string $course_id, string $lesson_id = NULL): mixed {
     $query = $this->database->select('custom_utility_course_user_table', 'ct')
       ->fields('ct', ['id'])
       ->condition('ct.course_id', $course_id);
@@ -56,7 +66,10 @@ class CommonService {
     return $count;
   }
 
-  function checkCourseLessonCompleted(string $course_id, string $lesson_id): mixed {
+  /**
+   * CheckCourseLessonCompleted.
+   */
+  public function checkCourseLessonCompleted(string $course_id, string $lesson_id): mixed {
     $query = $this->database->select('custom_utility_course_user_table', 'ct')
       ->fields('ct', ['id'])
       ->condition('ct.course_id', $course_id)
@@ -68,7 +81,10 @@ class CommonService {
     return $query;
   }
 
-  function addCourseLessonEntry(string $course_id, string $lesson_id, bool $lesson_completed = FALSE): mixed {
+  /**
+   * AddCourseLessonEntry.
+   */
+  public function addCourseLessonEntry(string $course_id, string $lesson_id, bool $lesson_completed = FALSE): mixed {
     $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
 
     // Insert data into the custom course user table.
@@ -87,7 +103,10 @@ class CommonService {
     return $query;
   }
 
-  function addCourseCompletionEntry(string $course_id, int $lesson_completed = 0): void {
+  /**
+   * AddCourseCompletionEntry.
+   */
+  public function addCourseCompletionEntry(string $course_id, int $lesson_completed = 0): void {
     $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
     $this->database->merge('custom_utility_course_completion_table')
       ->key([
@@ -101,7 +120,10 @@ class CommonService {
       ->execute();
   }
 
-  function getCompletionDate(string $course_id): string {
+  /**
+   * GetCompletionDate.
+   */
+  public function getCompletionDate(string $course_id): string {
     $query = $this->database->select('custom_utility_course_completion_table', 'ct')
       ->fields('ct', ['completion_date'])
       ->condition('ct.course_id', $course_id)
@@ -110,7 +132,10 @@ class CommonService {
       ->fetchField();
   }
 
-  function getCompletedLessonCount(string $course_id): int {
+  /**
+   * GetCompletedLessonCount.
+   */
+  public function getCompletedLessonCount(string $course_id): int {
     $query = $this->database->select('custom_utility_course_user_table', 'ct')
       ->fields('ct', ['id'])
       ->condition('ct.course_id', $course_id)
@@ -122,7 +147,10 @@ class CommonService {
     return $count;
   }
 
-  function getCoursePercentage(NodeInterface $course): int {
+  /**
+   * GetCoursePercentage.
+   */
+  public function getCoursePercentage(NodeInterface $course): int {
     $total_lessons = count($course->field_lessons);
     $lessons_completed = $this->getCompletedLessonCount($course->id());
     $percentage =
@@ -130,7 +158,10 @@ class CommonService {
     return $percentage;
   }
 
-  function addCourseGradeEntry(string $course_id, int $grade): mixed {
+  /**
+   * AddCourseGradeEntry.
+   */
+  public function addCourseGradeEntry(string $course_id, int $grade): mixed {
     $creation_date = date('Y-m-d H:i:s', \Drupal::time()->getRequestTime());
 
     // Insert data into the custom course user table.
@@ -147,7 +178,10 @@ class CommonService {
     return $query;
   }
 
-  function getCourseGrade(string $course_id): mixed {
+  /**
+   * GetCourseGrade.
+   */
+  public function getCourseGrade(string $course_id): mixed {
     $query = $this->database->select('custom_utility_course_grade_table', 'ct')
       ->fields('ct', ['course_grade'])
       ->condition('ct.course_id', $course_id)
@@ -155,11 +189,15 @@ class CommonService {
     return $query->execute()->fetchField();
   }
 
-  function getAverageCourseGrade(string $course_id): mixed {
+  /**
+   * GetAverageCourseGrade.
+   */
+  public function getAverageCourseGrade(string $course_id): mixed {
     $query = $this->database->select('custom_utility_course_grade_table', 'cgt');
     $query->addExpression('AVG(cgt.course_grade)', 'average_score');
     $query->condition('cgt.course_id', $course_id);
-    $query->groupBy('cgt.course_id'); // Group by course_id
+    // Group by course_id.
+    $query->groupBy('cgt.course_id');
     $queryString = $query->__toString();
 
     // Execute the query and get the average score.
@@ -167,8 +205,11 @@ class CommonService {
     return $result->fetchField();
   }
 
-  function getCourseNidsFromCustom(string $option): array {
-    $return_obj = null;
+  /**
+   * GetCourseNidsFromCustom.
+   */
+  public function getCourseNidsFromCustom(string $option): array {
+    $return_obj = NULL;
     $return_assoc = [];
     switch ($option) {
       case 'courses_enrolled':
@@ -180,6 +221,7 @@ class CommonService {
         $return_obj = $result->fetchAll();
 
         break;
+
       case 'courses_completed':
         $query = $this->database->select('custom_utility_course_completion_table', 'cct')
           ->fields('cct', ['course_id'])
@@ -189,6 +231,7 @@ class CommonService {
         $return_obj = $result->fetchAll();
 
         break;
+
       case 'courses_not_graded':
         $query = $this->database->select('custom_utility_course_grade_table', 'cct')
           ->fields('cct', ['course_id'])
@@ -197,7 +240,7 @@ class CommonService {
         $return_obj = $result->fetchAll();
         $exclude_nids = $this->parseArrayObject($return_obj);
         // Node Query @ToDo later these 2 queries can be merged to an optimised
-        // one using Join
+        // one using Join.
         $nodeQuery = $this->database->select('node', 'n');
         $nodeQuery->addExpression('n.nid', 'course_id');
         $nodeQuery->condition('n.type', 'course');
@@ -206,6 +249,7 @@ class CommonService {
         }
         $return_obj = $nodeQuery->execute()->fetchAll();
         break;
+
       default:
         break;
     }
@@ -215,10 +259,13 @@ class CommonService {
     return $return_assoc;
   }
 
+  /**
+   * ParseArrayObject.
+   */
   protected function parseArrayObject($return_obj): array {
-    return
-      array_map(function ($object) {
-        return $object->course_id;
-      }, $return_obj);
+    return array_map(function ($object) {
+      return $object->course_id;
+    }, $return_obj);
   }
+
 }
